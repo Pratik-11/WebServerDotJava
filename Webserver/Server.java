@@ -1,5 +1,6 @@
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,8 +8,8 @@ import java.io.PrintWriter;
 
 public class Server {
 
-    public void run(){
-        int port = 8080;
+    public void run() throws SocketException, IOException {
+        int port = 8010;
         ServerSocket socket = new ServerSocket(port);
         socket.setSoTimeout(10000);
         while(true){
@@ -19,6 +20,9 @@ public class Server {
                 PrintWriter toClient = new PrintWriter(acceptedCon.getOutputStream());  //to client means sending to client
                 BufferedReader fromClient = new BufferedReader(new InputStreamReader(acceptedCon.getInputStream()));
                 toClient.println("Hello from the Server");
+                toClient.close();
+                fromClient.close();
+                acceptedCon.close();
             }catch(IOException ex){
                 ex.printStackTrace();
             }
